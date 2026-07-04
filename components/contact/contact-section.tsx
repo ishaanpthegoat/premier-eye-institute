@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MapPin, Clock, Phone, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactForm } from "@/components/contact/contact-form";
 import { site, hoursCompact } from "@/lib/site";
@@ -21,19 +22,15 @@ export function ContactSection({ heading = true }: { heading?: boolean }) {
                   we&apos;ll help you make the most of your vision plan.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3.5">
-                  <Link
-                    href="/book"
-                    className="press inline-flex min-h-12 items-center justify-center rounded-full bg-accent px-8 text-[15.5px] font-semibold text-white shadow-cta transition-[transform,translate,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-                  >
-                    Book Appointment
-                  </Link>
-                  <a
-                    href={site.phoneHref}
-                    className="press inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-ink/10 bg-white px-7 text-[15.5px] font-semibold text-ink transition-[transform,translate,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:border-ink/20"
-                  >
-                    <Phone className="size-4 text-accent" aria-hidden="true" />
-                    {site.phoneDisplay}
-                  </a>
+                  <Button asChild variant="pill" size="pill">
+                    <Link href="/book">Book Appointment</Link>
+                  </Button>
+                  <Button asChild variant="pill-outline" size="pill">
+                    <a href={site.phoneHref}>
+                      <Phone className="size-4 text-accent" aria-hidden="true" />
+                      {site.phoneDisplay}
+                    </a>
+                  </Button>
                 </div>
               </Reveal>
             )}

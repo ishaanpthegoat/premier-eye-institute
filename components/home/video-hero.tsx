@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { HeroShader } from "@/components/home/hero-shader";
 import { site } from "@/lib/site";
 
@@ -14,53 +15,68 @@ import { site } from "@/lib/site";
    Playback time is driven by scroll and eased with a lerp inside one
    persistent rAF loop; all per-frame DOM writes go through refs. */
 
+/* Four beats matched to /hero-story.mp4 (~10s): glasses (0–2s), the
+   phoropter (3–5s), its parts mid-air in orange light (5.5–8s), and the
+   corneal topographer (8.5–10s). */
 const SCENES = [
   {
     eyebrow: "01 · The frames",
     title: "Crafted frames, fitted to you",
     copy: "Honest styling help from our optical team — eyewear you'll actually want to wear.",
-    from: 0.1,
-    to: 0.31,
+    from: 0.08,
+    to: 0.27,
     side: "left" as const,
   },
   {
     eyebrow: "02 · The exam",
     title: "Unhurried, thorough exams",
     copy: "Modern imaging and screening, with time to actually talk about your eyes.",
-    from: 0.38,
-    to: 0.64,
+    from: 0.33,
+    to: 0.5,
     side: "right" as const,
   },
   {
-    eyebrow: "03 · The family",
-    title: "Care for every kind of eye",
-    copy: "From a child's first exam to lifelong eye health — all under one roof.",
-    from: 0.7,
+    eyebrow: "03 · The precision",
+    title: "Calibrated to the smallest detail",
+    copy: "The instruments behind your prescription, tuned for exactness at every turn.",
+    from: 0.56,
+    to: 0.73,
+    side: "left" as const,
+  },
+  {
+    eyebrow: "04 · The technology",
+    title: "Imaging that sees more",
+    copy: "Advanced screening — from glaucoma testing to the corneal mapping behind Ortho-K.",
+    from: 0.78,
     to: 0.94,
     side: "center" as const,
   },
 ];
 
-const LERP = 0.16;
+/* Gentle scrub: the lower the lerp, the more the video glides behind the
+   scroll instead of snapping to it. */
+const LERP = 0.09;
 
 /* The video's travel path across the stage: [progress, drift] pairs,
    where drift is a fraction of the max excursion (+1 = right, -1 = left).
    Smoothstepped between stops so direction changes never feel mechanical. */
 const DRIFT_PATH: [number, number][] = [
   [0, 0],
-  [0.07, 0],
-  [0.17, 1],
-  [0.34, 1],
-  [0.48, -1],
-  [0.66, -1],
-  [0.84, 0],
+  [0.05, 0],
+  [0.13, 1],
+  [0.28, 1],
+  [0.38, -1],
+  [0.51, -1],
+  [0.6, 1],
+  [0.74, 1],
+  [0.82, 0],
   [1, 0],
 ];
 
 const SCALE_PATH: [number, number][] = [
   [0, 1],
-  [0.5, 1.06],
-  [0.85, 1.03],
+  [0.45, 1.06],
+  [0.8, 1.04],
   [1, 0.96],
 ];
 
@@ -118,7 +134,7 @@ export function VideoHero() {
     const video = videoRef.current;
     if (!hero || !video) return;
 
-    let duration = 4;
+    let duration = 10;
     const setDur = () => {
       if (video.duration && isFinite(video.duration)) duration = video.duration;
     };
@@ -264,7 +280,7 @@ export function VideoHero() {
         />
         <HeroCopy />
         <video
-          src="/hero-glasses.mp4"
+          src="/hero-story.mp4"
           muted
           loop
           autoPlay
@@ -301,7 +317,7 @@ export function VideoHero() {
   }
 
   return (
-    <section ref={heroRef} className="relative h-[300vh]" aria-label="Introduction">
+    <section ref={heroRef} className="relative h-[500vh]" aria-label="Introduction">
       <div className="sticky top-0 flex h-[100dvh] flex-col items-center justify-center overflow-hidden px-5 pb-10 pt-24 text-center sm:px-8">
         {/* Static wash first (SSR / no-WebGL), living shader light above it. */}
         <div
@@ -371,7 +387,7 @@ export function VideoHero() {
             wrapper would isolate the blend and bring the backdrop back. */}
         <video
           ref={videoRef}
-          src="/hero-glasses.mp4"
+          src="/hero-story.mp4"
           muted
           playsInline
           preload="auto"
@@ -437,18 +453,12 @@ function HeroCta({ className = "" }: { className?: string }) {
     <div
       className={`animate-in fade-in slide-in-from-bottom-4 flex flex-wrap items-center justify-center gap-3 fill-mode-both duration-1000 [animation-delay:480ms] ${className}`}
     >
-      <Link
-        href="/book"
-        className="press inline-flex min-h-12 items-center justify-center rounded-full bg-accent px-8 text-[15.5px] font-semibold text-white shadow-cta transition-[transform,translate,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-      >
-        Book an Appointment
-      </Link>
-      <a
-        href={site.phoneHref}
-        className="press inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ink/10 bg-white px-7 text-[15.5px] font-semibold text-ink transition-[transform,translate,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:border-ink/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-      >
-        {site.phoneDisplay}
-      </a>
+      <Button asChild variant="pill" size="pill">
+        <Link href="/book">Book an Appointment</Link>
+      </Button>
+      <Button asChild variant="pill-outline" size="pill">
+        <a href={site.phoneHref}>{site.phoneDisplay}</a>
+      </Button>
     </div>
   );
 }

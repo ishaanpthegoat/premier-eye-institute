@@ -5,6 +5,7 @@ import { PageHero } from "@/components/site/page-hero";
 import { CtaBand } from "@/components/site/cta-band";
 import { Reveal } from "@/components/motion/reveal";
 import { ServiceIcon } from "@/components/home/service-icon";
+import { Button } from "@/components/ui/button";
 import { services, site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -47,19 +48,15 @@ export default function ServicesPage() {
                       {s.long}
                     </p>
                     <div className="mt-5 flex flex-wrap gap-3">
-                      <Link
-                        href="/book"
-                        className="inline-flex min-h-10 items-center rounded-full bg-accent px-5 text-[13.5px] font-semibold text-white transition-colors hover:bg-accent-hover"
-                      >
-                        Book this service
-                      </Link>
-                      <a
-                        href={site.phoneHref}
-                        className="inline-flex min-h-10 items-center gap-2 rounded-full border border-ink/10 px-5 text-[13.5px] font-semibold text-ink transition-colors hover:border-ink/25"
-                      >
-                        <Phone className="size-3.5 text-accent" aria-hidden="true" />
-                        Ask us about it
-                      </a>
+                      <Button asChild variant="pill" size="pill-sm" className="min-h-10 px-5 text-[13.5px]">
+                        <Link href="/book">Book this service</Link>
+                      </Button>
+                      <Button asChild variant="pill-outline" size="pill-sm" className="min-h-10 px-5 text-[13.5px]">
+                        <a href={site.phoneHref}>
+                          <Phone className="size-3.5 text-accent" aria-hidden="true" />
+                          Ask us about it
+                        </a>
+                      </Button>
                     </div>
                   </div>
                 </div>

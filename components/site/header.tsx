@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import { Menu, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -40,20 +42,42 @@ export function Header() {
       <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between px-5 sm:px-8">
         <Logo />
 
-        <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={pathname === item.href ? "page" : undefined}
-              className={cn(
-                "text-[14.5px] font-medium transition-colors duration-200 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
-                pathname === item.href ? "text-accent" : "text-body-text"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+        {/* Tubelight active indicator adapted from 21st.dev (ayushmxxn):
+            a shared-layout lamp that springs between links as you navigate. */}
+        <nav aria-label="Main" className="hidden items-center gap-2 lg:flex">
+          {nav.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "relative rounded-full px-3.5 py-1.5 text-[14.5px] font-medium transition-colors duration-200 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
+                  isActive ? "text-accent-hover" : "text-body-text"
+                )}
+              >
+                {item.label}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-lamp"
+                    aria-hidden="true"
+                    className="absolute inset-0 -z-10 rounded-full bg-accent-tint/60"
+                    initial={false}
+                    transition={
+                      reduced
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 300, damping: 30 }
+                    }
+                  >
+                    <span className="absolute -top-[9px] left-1/2 h-[3px] w-7 -translate-x-1/2 rounded-b-full bg-accent">
+                      <span className="absolute -left-2 -top-1 h-5 w-11 rounded-full bg-accent/25 blur-md" />
+                    </span>
+                  </motion.span>
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
@@ -107,13 +131,12 @@ export function Header() {
                 ))}
               </nav>
               <div className="mt-auto flex flex-col gap-3 p-4">
-                <a
-                  href={site.phoneHref}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-ink/10 bg-white px-6 text-[15px] font-semibold text-ink"
-                >
-                  <Phone className="size-4 text-accent" aria-hidden="true" />
-                  {site.phoneDisplay}
-                </a>
+                <Button asChild variant="pill-outline" size="pill-sm">
+                  <a href={site.phoneHref}>
+                    <Phone className="size-4 text-accent" aria-hidden="true" />
+                    {site.phoneDisplay}
+                  </a>
+                </Button>
                 <Button
                   asChild
                   className="press min-h-11 rounded-full bg-accent font-semibold text-white shadow-cta transition-transform duration-150 hover:bg-accent-hover"

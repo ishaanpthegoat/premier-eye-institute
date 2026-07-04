@@ -191,8 +191,8 @@ export const doctorCredentials = [
   "Eye care mission work in Guatemala",
 ] as const;
 
-/* Placeholder testimonials — replace with the practice's real Google /
-   Facebook reviews before launch. Names and quotes are illustrative. */
+/* Placeholder testimonials — replace ALL of these with the practice's real
+   Google / Facebook reviews before launch. Names and quotes are illustrative. */
 export const testimonials = [
   {
     quote:
@@ -211,6 +211,42 @@ export const testimonials = [
       "My dry eye finally has a plan that works. I drive from Durham because the care here is worth it.",
     name: "Linda R.",
     detail: "Dry eye treatment",
+  },
+  {
+    quote:
+      "Picked out frames I actually love. No pressure, honest opinions, and they adjusted them perfectly before I left.",
+    name: "Devon K.",
+    detail: "Prescription glasses",
+  },
+  {
+    quote:
+      "They caught an early pressure change my old office missed and walked me through every next step. That kind of attention matters.",
+    name: "Patricia H.",
+    detail: "Glaucoma testing",
+  },
+  {
+    quote:
+      "Ortho-K changed my mornings — I see clearly all day without glasses. The fitting process was careful and thorough.",
+    name: "Jason M.",
+    detail: "Ortho-K contacts",
+  },
+  {
+    quote:
+      "Easy scheduling, zero wait, and the doctor remembered details from my visit a year ago. Small-town care done right.",
+    name: "Emily C.",
+    detail: "Annual exam",
+  },
+  {
+    quote:
+      "My son's sports goggles fit great and survived a whole soccer season. They knew exactly what he needed.",
+    name: "Robert D.",
+    detail: "Sports vision",
+  },
+  {
+    quote:
+      "Screens were wrecking my eyes by 3pm every day. Their computer vision plan actually fixed it.",
+    name: "Aisha B.",
+    detail: "Computer vision care",
   },
 ] as const;
 

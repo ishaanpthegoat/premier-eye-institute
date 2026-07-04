@@ -3,7 +3,49 @@ import { Check } from "lucide-react";
 import { PageHero } from "@/components/site/page-hero";
 import { CtaBand } from "@/components/site/cta-band";
 import { Reveal } from "@/components/motion/reveal";
+import { Timeline } from "@/components/ui/timeline";
 import { team, doctorCredentials, site } from "@/lib/site";
+
+const visitSteps = [
+  {
+    title: "Check-in",
+    content: (
+      <p className="max-w-md text-[15px] leading-[1.65] text-body-text">
+        A warm welcome from the front desk, a few minutes of paperwork if
+        you&apos;re new, and quick pre-testing to map how your eyes are doing
+        today.
+      </p>
+    ),
+  },
+  {
+    title: "The exam",
+    content: (
+      <p className="max-w-md text-[15px] leading-[1.65] text-body-text">
+        Unhurried time with Dr. Mehta — modern imaging and screening, honest
+        answers, and a prescription you can trust.
+      </p>
+    ),
+  },
+  {
+    title: "The optical",
+    content: (
+      <p className="max-w-md text-[15px] leading-[1.65] text-body-text">
+        If you need eyewear, our optical team helps you find frames that fit
+        your face, your prescription, and your budget — then adjusts them
+        until they&apos;re right.
+      </p>
+    ),
+  },
+  {
+    title: "After your visit",
+    content: (
+      <p className="max-w-md text-[15px] leading-[1.65] text-body-text">
+        You leave with a clear plan for your eyes. Between visits, we&apos;re a
+        phone call away — and existing patients can use the Crystal PM portal.
+      </p>
+    ),
+  },
+];
 
 export const metadata: Metadata = {
   title: "About Us & Meet the Team",
@@ -69,6 +111,16 @@ export default function AboutPage() {
             </ul>
           </div>
         </div>
+      </section>
+
+      <section className="mx-auto max-w-[1140px] px-5 pb-10 sm:px-8">
+        <Reveal>
+          <p className="eyebrow mb-3.5">What to expect</p>
+          <h2 className="font-heading text-[clamp(28px,4vw,46px)] font-medium leading-[1.08] tracking-[-0.5px] text-ink">
+            Your first visit, step by step.
+          </h2>
+        </Reveal>
+        <Timeline data={visitSteps} />
       </section>
 
       <section className="bg-surface-alt">

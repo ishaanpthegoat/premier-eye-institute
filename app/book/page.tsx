@@ -3,6 +3,7 @@ import { Phone, Clock, MapPin, ExternalLink } from "lucide-react";
 import { PageHero } from "@/components/site/page-hero";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactForm } from "@/components/contact/contact-form";
+import { GlowBorder } from "@/components/ui/glow-border";
 import { site, hours } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -48,6 +49,7 @@ export default function BookPage() {
             </Reveal>
 
             <Reveal delay={0.08}>
+              <GlowBorder className="rounded-lg">
               <div className="rounded-lg border border-ink/[0.07] bg-white p-7 shadow-soft sm:p-8">
                 <div className="flex items-start gap-4">
                   <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-accent-tint text-accent">
@@ -91,6 +93,7 @@ export default function BookPage() {
                   </div>
                 </div>
               </div>
+              </GlowBorder>
             </Reveal>
 
             <Reveal delay={0.14}>

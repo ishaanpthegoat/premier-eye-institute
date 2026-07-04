@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/motion/reveal";
+import { TextRotate } from "@/components/ui/text-rotate";
 
 /* The Snellen column is a quiet nod to the exam room — decorative only. */
 const SNELLEN = ["E", "FP", "TOZ", "LPED"];
@@ -22,9 +23,13 @@ export function Intro() {
 
       <Reveal>
         <p className="font-heading mx-auto max-w-[760px] text-center text-[clamp(24px,3.4vw,40px)] font-normal leading-[1.32] tracking-[-0.3px] text-[#221d19] lg:pr-28 lg:text-left">
-          A modern practice built around{" "}
-          <span className="text-accent">how you actually see</span> — thorough
-          exams, honest advice, and eyewear you&apos;ll want to wear every day.
+          A modern practice built around how you actually{" "}
+          <TextRotate
+            texts={["see", "read", "work", "drive", "play"]}
+            className="min-w-[2.6em] text-accent"
+          />{" "}
+          — thorough exams, honest advice, and eyewear you&apos;ll want to wear
+          every day.
         </p>
       </Reveal>
     </section>

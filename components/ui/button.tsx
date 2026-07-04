@@ -19,6 +19,12 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        /* Site CTAs: warm pills with press feedback (.press in globals.css) */
+        pill: "press rounded-full bg-accent font-semibold text-white shadow-cta transition-[transform,translate,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:bg-accent-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
+        "pill-outline":
+          "press rounded-full border-ink/10 bg-white font-semibold text-ink transition-[transform,translate,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:border-ink/20 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
+        "pill-ghost":
+          "press rounded-full border-white/20 bg-transparent font-semibold text-white transition-[transform,translate,background-color,border-color] duration-200 hover:-translate-y-0.5 hover:border-white/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
       },
       size: {
         default:
@@ -32,6 +38,8 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        pill: "min-h-12 gap-2 rounded-full px-8 text-[15.5px]",
+        "pill-sm": "min-h-11 gap-2 rounded-full px-6 text-[14px]",
       },
     },
     defaultVariants: {

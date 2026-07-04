@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -26,21 +27,17 @@ export function MobileCtaBar() {
       )}
       aria-hidden={!show}
     >
-      <a
-        href={site.phoneHref}
-        tabIndex={show ? 0 : -1}
-        className="press inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border border-ink/10 bg-white text-[14.5px] font-semibold text-ink transition-transform duration-150"
-      >
-        <Phone className="size-4 text-accent" aria-hidden="true" />
-        Call
-      </a>
-      <Link
-        href="/book"
-        tabIndex={show ? 0 : -1}
-        className="press inline-flex min-h-12 flex-[1.6] items-center justify-center rounded-full bg-accent text-[14.5px] font-semibold text-white shadow-cta transition-transform duration-150"
-      >
-        Book Appointment
-      </Link>
+      <Button asChild variant="pill-outline" size="pill" className="min-h-12 flex-1 px-4 text-[14.5px]">
+        <a href={site.phoneHref} tabIndex={show ? 0 : -1}>
+          <Phone className="size-4 text-accent" aria-hidden="true" />
+          Call
+        </a>
+      </Button>
+      <Button asChild variant="pill" size="pill" className="min-h-12 flex-[1.6] px-4 text-[14.5px]">
+        <Link href="/book" tabIndex={show ? 0 : -1}>
+          Book Appointment
+        </Link>
+      </Button>
     </div>
   );
 }

@@ -61,7 +61,8 @@ public/hero-glasses.mp4  (640×640, ~4s)   public/logo.webp  (real logo, 300×80
 
 ## The video hero (`components/home/video-hero.tsx`) — the signature piece (reworked July 3 2026 pm)
 
-- 300vh section, sticky `100dvh` stage. Scroll progress → target video time; eased with `current += (target-current) * 0.16` inside **one persistent rAF loop**; all per-frame DOM writes go through refs (no React state per frame). Video is primed via `play().then(pause)` on `loadedmetadata` so seeks are instant.
+- **Video is now `public/hero-story.mp4`** (10s, 1080×1080, encoded from the user's DaVinci render with `-g 8` dense keyframes so scrubbing is smooth; source in Downloads). **Four beats**: glasses (0–2s) → warm bronze phoropter (3–5s) → parts orbited by orange light rings (5.5–8s) → Tomey corneal topographer (8.5–10s). SCENES: 0.08–0.27 left, 0.33–0.50 right, 0.56–0.73 left, 0.78–0.94 center. Runway **500vh**, LERP **0.09** — user asked for slower/less sensitive scrub; don't speed it back up.
+- 500vh section, sticky `100dvh` stage. Scroll progress → target video time; eased with `current += (target-current) * 0.16` inside **one persistent rAF loop**; all per-frame DOM writes go through refs (no React state per frame). Video is primed via `play().then(pause)` on `loadedmetadata` so seeks are instant.
 - **Frameless, blended into the page**: the chip frame is gone. The video (white-studio-background footage) gets `mix-blend-mode: multiply` + `filter: brightness(1.07)` (clips the studio backdrop past pure white so it dissolves completely) + a radial `mask-image` feather (`black 58% → transparent 99%`) killing the square edge. **Blend + mask + transform all live on the `<video>` element itself — a transformed wrapper creates a stacking context that isolates the blend and brings the backdrop back.**
 - **The video travels the stage**: `DRIFT_PATH`/`SCALE_PATH` keyframes sampled with smoothstep and lerped in the rAF loop. Center → drifts right (scene 1 caption slides in from the left) → drifts left (scene 2 caption on the right) → returns center-small (scene 3 caption drifts up into the headline space) → the stage unsticks and the page carries it away. Desktop drift `min(15vw, 240px)`; <1024px just a 2vw sway with the old center-crossfade captions. Mouse parallax (±14px/±10px, lerped, mouse-only) replaced the old chip tilt.
 - **Scene windows tuned against actual footage + lerp lag:** 0.10–0.31 (frames), 0.38–0.64 (exam), 0.70–0.94 (family). Headline fades at `1 - p*7`. The video's own blue "energy morph" transitions read as intentional during caption 1's tail at natural scroll speeds — don't chase them earlier.
@@ -76,6 +77,14 @@ public/hero-glasses.mp4  (640×640, ~4s)   public/logo.webp  (real logo, 300×80
 - `--ease-out-strong: cubic-bezier(0.23,1,0.32,1)` token added; `Reveal` now 0.7s with that curve.
 - CTA transitions: `transition-all` replaced with explicit `transition-[transform,translate,background-color,border-color] duration-200` (web-interface-guidelines + Emil rule).
 - **Magic MCP gotcha**: the server still doesn't get the API key when the session launches from the Desktop cwd — work around by calling the API directly: `POST https://api.21st.dev/api/search` with `x-api-key` from `.mcp.json`, JSON body `{"search":"...","page":1,"per_page":8}`; component code lives at the returned `component_data.code` CDN URL.
+
+## 21st.dev component layer (July 3 2026, second pass)
+
+Twelve components pulled from 21st.dev and adapted to the token system in `components/ui/`: `testimonials-column` (home + /reviews, initials instead of stock faces, sr-only fallback lists), `spotlight-card` (services cards), `lamp-glow` (CtaBand ink band), `text-rotate` (Intro "see/read/work/drive/play"), `timeline` (about "Your first visit" — beam fills on scroll), `bento-grid` (patient-resources), `feature-grid` (payments-insurance), `display-cards` (eyewear fan; flattens below md), `gooey-text` (404 morph; fixed the original's rAF leak), `glow-border` (book page card), plus the tubelight nav lamp living inline in `site/header.tsx` (layoutId spring, pathname-driven). Rejected with reasons: sparkles (tsparticles dep), radial-orbital + shader components (dark/off-brand), scroll-expansion-hero (wheel hijack vs Lenis), stock 404 (broken code). All animated adaptations handle `prefers-reduced-motion`.
+
+**All pill CTAs go through shadcn `Button`** — variants `pill` / `pill-outline` / `pill-ghost` + sizes `pill` / `pill-sm` in `components/ui/button.tsx` (press feedback + explicit transition list baked in). Don't hand-roll CTA classNames anymore.
+
+Repo: https://github.com/ishaanpthegoat/premier-eye-institute (private, main). Testimonials are now NINE placeholders in lib/site.ts — still all placeholder, replace before launch.
 
 ## Confirmed business facts (from client, July 3 2026)
 
