@@ -4,6 +4,7 @@ import { useEffect, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { HeroShader } from "@/components/home/hero-shader";
+import { withBasePath } from "@/lib/base-path";
 import { site } from "@/lib/site";
 
 /* The signature moment of the site: a 300vh scroll runway with a sticky
@@ -280,7 +281,7 @@ export function VideoHero() {
         />
         <HeroCopy />
         <video
-          src="/hero-story.mp4"
+          src={withBasePath("/hero-story.mp4")}
           muted
           loop
           autoPlay
@@ -387,7 +388,7 @@ export function VideoHero() {
             wrapper would isolate the blend and bring the backdrop back. */}
         <video
           ref={videoRef}
-          src="/hero-story.mp4"
+          src={withBasePath("/hero-story.mp4")}
           muted
           playsInline
           preload="auto"

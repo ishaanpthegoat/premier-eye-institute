@@ -1,5 +1,8 @@
 import type { MetadataRoute } from "next";
 
+// Required for output: "export" — metadata routes must opt into static.
+export const dynamic = "force-static";
+
 const base = "https://peicare.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
