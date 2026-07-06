@@ -22,10 +22,6 @@ const faqs = [
     a: "Saturdays are by appointment only. Call the office and we'll find a time that works for your schedule.",
   },
   {
-    q: "What is Ortho-K?",
-    a: "Orthokeratology uses special contact lenses worn overnight to gently reshape the front of the eye, so many patients can see clearly all day without glasses or daytime contacts. Ask us whether you're a good candidate.",
-  },
-  {
     q: "How do I book an appointment?",
     a: `The fastest way is to call ${site.phoneDisplay} during office hours. You can also send a request through our contact form and we'll call you back, and existing patients can reach us through the Crystal PM patient portal.`,
   },

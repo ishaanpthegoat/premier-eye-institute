@@ -11,7 +11,7 @@ import { services, site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Eye Care Services in Creedmoor, NC",
   description:
-    "Comprehensive eye exams, contact lens fittings, Ortho-K, dry eye treatment, LASIK co-management, sports vision, glaucoma testing, and eyewear at Premier Eye Institute in Creedmoor, NC.",
+    "Comprehensive eye exams, contact lens fittings, and LASIK co-management at Premier Eye Institute in Creedmoor, NC.",
 };
 
 export default function ServicesPage() {

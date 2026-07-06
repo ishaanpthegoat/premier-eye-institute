@@ -10,7 +10,7 @@ import { testimonials, site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Patient Reviews & Testimonials",
   description:
-    "What patients say about Premier Eye Institute in Creedmoor, NC — reviews of eye exams, contact lens fittings, and dry eye care from Dr. Nisha Mehta, OD.",
+    "What patients say about Premier Eye Institute in Creedmoor, NC — reviews of eye exams, contact lens fittings, and eyewear from Dr. Nisha Mehta, OD.",
 };
 
 export default function ReviewsPage() {

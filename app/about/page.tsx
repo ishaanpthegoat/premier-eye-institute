@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Check } from "lucide-react";
 import { PageHero } from "@/components/site/page-hero";
 import { CtaBand } from "@/components/site/cta-band";
 import { Reveal } from "@/components/motion/reveal";
 import { Timeline } from "@/components/ui/timeline";
+import { withBasePath } from "@/lib/base-path";
 import { team, doctorCredentials, site } from "@/lib/site";
+
+const doctor = team[0];
 
 const visitSteps = [
   {
@@ -72,12 +76,23 @@ export default function AboutPage() {
         <div className="grid items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
           <Reveal>
             <div className="relative mx-auto aspect-[4/5] w-full max-w-[400px] overflow-hidden rounded-xl bg-gradient-to-br from-hero-wash via-accent-tint to-[#f3dccd] shadow-warm-lg ring-1 ring-ink/5">
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-accent">
-                <span className="font-heading text-7xl font-medium">NM</span>
-                <span className="text-xs font-semibold uppercase tracking-[2.6px] text-ink/50">
-                  Photo coming soon
-                </span>
-              </div>
+              {doctor.photo ? (
+                <Image
+                  src={withBasePath(doctor.photo)}
+                  alt={doctor.name}
+                  fill
+                  sizes="400px"
+                  priority
+                  className="object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-accent">
+                  <span className="font-heading text-7xl font-medium">NM</span>
+                  <span className="text-xs font-semibold uppercase tracking-[2.6px] text-ink/50">
+                    Photo coming soon
+                  </span>
+                </div>
+              )}
             </div>
           </Reveal>
 
@@ -135,9 +150,21 @@ export default function AboutPage() {
             {team.slice(1).map((m, i) => (
               <Reveal as="li" key={m.name} delay={(i % 3) * 0.08}>
                 <div className="flex h-full flex-col rounded-lg border border-ink/[0.07] bg-white p-7 shadow-soft">
-                  <span className="font-heading mb-4 inline-flex size-12 items-center justify-center rounded-full bg-accent-tint text-lg font-semibold text-accent">
-                    {m.name.charAt(0)}
-                  </span>
+                  {m.photo ? (
+                    <span className="relative mb-4 inline-block size-16 overflow-hidden rounded-full ring-1 ring-ink/5">
+                      <Image
+                        src={withBasePath(m.photo)}
+                        alt={m.name}
+                        fill
+                        sizes="64px"
+                        className="object-cover"
+                      />
+                    </span>
+                  ) : (
+                    <span className="font-heading mb-4 inline-flex size-12 items-center justify-center rounded-full bg-accent-tint text-lg font-semibold text-accent">
+                      {m.name.charAt(0)}
+                    </span>
+                  )}
                   <h3 className="font-heading text-xl font-semibold text-ink">
                     {m.name}
                   </h3>

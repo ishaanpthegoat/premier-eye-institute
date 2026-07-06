@@ -66,89 +66,41 @@ export const services: Service[] = [
     slug: "eye-exams",
     title: "Eye & Vision Exams",
     short:
-      "Unhurried, comprehensive exams for the whole family — vision, eye health, and early detection in one calm visit.",
-    long: "A full exam checks far more than how well you read a chart. We evaluate your vision, screen for eye disease, and look at the overall health of your eyes — for kids, adults, and seniors alike.",
+      "A full history review, vision and eye-health testing, and time to talk through anything we find.",
+    long: "Every exam includes a patient history review, a full series of vision and eye tests, and an evaluation of your eye health — not just a quick read of the chart. If anything needs a closer look, we'll walk you through what additional testing means and why.",
     icon: "eye",
   },
   {
     slug: "contact-lenses",
     title: "Contact Lens Exams & Fittings",
     short:
-      "Precise fittings and training for daily, monthly, and specialty lenses that feel like nothing at all.",
-    long: "Contacts should be comfortable from morning to night. We measure your eyes, match you to the right lens, and teach you how to wear and care for them with confidence.",
+      "Not sure contacts are for you? We'll walk you through every type and fit you for the one that matches your life.",
+    long: "Contact lens options have come a long way: rigid gas-permeable, daily soft, extended-wear, disposable, and planned-replacement lenses all fit differently. We'll talk through them with you and land on the type that actually suits your eyes and your routine.",
     icon: "contact",
-  },
-  {
-    slug: "ortho-k",
-    title: "Ortho-K Contacts",
-    short:
-      "Special lenses worn overnight that gently reshape the eye — wake up and see clearly, no glasses needed.",
-    long: "Orthokeratology (Ortho-K) uses custom lenses worn while you sleep to temporarily reshape the front of the eye. Many patients see clearly all day without glasses or daytime contacts.",
-    icon: "moon",
-  },
-  {
-    slug: "dry-eye",
-    title: "Dry Eye Treatment",
-    short:
-      "Targeted relief for tired, gritty, irritated eyes — so long days stop costing you comfort.",
-    long: "Dry eye is one of the most common reasons patients visit us. We find the cause — not just the symptom — and build a treatment plan that brings lasting relief.",
-    icon: "droplet",
   },
   {
     slug: "lasik",
     title: "LASIK Co-Management",
     short:
       "Thinking about LASIK? We handle your pre-surgery evaluation and post-surgery care, close to home.",
-    long: "We work alongside trusted LASIK surgeons: we determine whether you're a good candidate, prepare you for surgery, and manage your follow-up care right here in Creedmoor.",
+    long: "LASIK corrects nearsightedness, farsightedness, and astigmatism as an alternative to glasses or contacts. We work alongside trusted surgeons — determining whether you're a good candidate, preparing you for surgery, and managing your follow-up care right here in Creedmoor.",
     icon: "sparkles",
-  },
-  {
-    slug: "computer-vision",
-    title: "Computer Vision Care",
-    short:
-      "Help for eye strain, headaches, and blur from long hours on screens.",
-    long: "Screens are part of life — eye strain doesn't have to be. We diagnose digital eye strain and offer solutions from specialized lenses to habits that protect your vision at the desk.",
-    icon: "monitor",
-  },
-  {
-    slug: "sports-vision",
-    title: "Sports Vision",
-    short:
-      "Sharper tracking, depth perception, and reaction time for athletes of every level.",
-    long: "Vision is a trainable athletic skill. From protective eyewear to performance-focused vision care, we help athletes see the play before it happens.",
-    icon: "activity",
-  },
-  {
-    slug: "glaucoma",
-    title: "Glaucoma Testing",
-    short:
-      "Early detection for the 'silent thief of sight' — pressure checks and screening built into your exam.",
-    long: "Glaucoma often has no early symptoms, which is why routine testing matters. We screen for it as part of comprehensive exams and monitor patients who are at risk.",
-    icon: "gauge",
-  },
-  {
-    slug: "glasses",
-    title: "Prescription Glasses & Frames",
-    short:
-      "Honest, personal frame styling with our optical team — eyewear you'll actually want to wear.",
-    long: "Our optical specialists help you find frames that fit your face, your prescription, and your life — with adjustments and repairs handled in-house.",
-    icon: "glasses",
-  },
-  {
-    slug: "sunglasses",
-    title: "Prescription & Non-Rx Sunglasses",
-    short:
-      "Real UV protection that matches your prescription — or just your style.",
-    long: "Sun protection is eye protection. We carry prescription and non-prescription sunglasses so your eyes stay safe on the brightest days.",
-    icon: "sun",
   },
 ];
 
-export const team = [
+export type TeamMember = {
+  name: string;
+  role: string;
+  bio: string;
+  photo?: string;
+};
+
+export const team: TeamMember[] = [
   {
     name: "Dr. Nisha Mehta, OD",
     role: "Optometrist & Owner",
     bio: "Trained at Pennsylvania College of Optometry (2006), with a residency in eye disease at the Baltimore VA. Fellow of the American Academy of Optometry, former clinical assistant professor at UNC Chapel Hill, and holder of an MBA from East Carolina University. Dr. Mehta has also provided eye care on mission work in Guatemala.",
+    photo: "/team/dr-mehta.webp",
   },
   {
     name: "Crystal",
@@ -159,11 +111,13 @@ export const team = [
     name: "Katie",
     role: "Optometric Technician",
     bio: "Handles preliminary testing and contact lens training, so you start every exam prepared.",
+    photo: "/team/katie.webp",
   },
   {
     name: "Maddie",
     role: "Optical Specialist",
     bio: "Helps with frame selection, orders, and repairs — your guide through the optical.",
+    photo: "/team/maddie.webp",
   },
   {
     name: "Amanda",
@@ -180,7 +134,7 @@ export const team = [
     role: "Optical Specialist",
     bio: "Helps patients pick frames that fit their style, face, and prescription.",
   },
-] as const;
+];
 
 export const doctorCredentials = [
   "Doctor of Optometry, Pennsylvania College of Optometry (2006)",
@@ -191,62 +145,63 @@ export const doctorCredentials = [
   "Eye care mission work in Guatemala",
 ] as const;
 
-/* Placeholder testimonials — replace ALL of these with the practice's real
-   Google / Facebook reviews before launch. Names and quotes are illustrative. */
+/* Real Google reviews, lightly trimmed for readability where the source
+   text was cut off mid-sentence. Only positive reviews are used here —
+   the two critical reviews in the source batch were left out. */
 export const testimonials = [
   {
     quote:
-      "Dr. Mehta took real time with my exam and explained everything in plain English. First eye doctor I haven't felt rushed by.",
-    name: "Sarah W.",
-    detail: "Comprehensive exam",
+      "It was a wonderful experience. Dr. Mehta was so knowledgeable and was extremely thorough with helping me with my exam and concerns.",
+    name: "Ashley Harrell",
+    detail: "New patient, comprehensive exam",
   },
   {
     quote:
-      "The whole team is wonderful — they helped my daughter get fitted for her first contacts and taught her everything patiently.",
-    name: "Marcus T.",
-    detail: "Contact lens fitting",
+      "Love this Eye Dr!! The staff is just as professional and helpful — our whole family was checked and the doctor never rushes through an exam.",
+    name: "Denise Green",
+    detail: "Family exam",
   },
   {
     quote:
-      "My dry eye finally has a plan that works. I drive from Durham because the care here is worth it.",
-    name: "Linda R.",
-    detail: "Dry eye treatment",
+      "I have been seeing Dr. Mehta, Katie Womble and some of the other staff here for quite a few years now and I am always very impressed with the expertise, kindness, and true professionalism.",
+    name: "Carolyn Peace",
+    detail: "Long-time patient",
   },
   {
     quote:
-      "Picked out frames I actually love. No pressure, honest opinions, and they adjusted them perfectly before I left.",
-    name: "Devon K.",
+      "I went in to get a prescription done for my glasses and they had the kindest people there. This one girl helped me pick out from a selection of glasses and it was all a very quick and easy process.",
+    name: "Alejandro Casarrubias-Rauda",
     detail: "Prescription glasses",
   },
   {
     quote:
-      "They caught an early pressure change my old office missed and walked me through every next step. That kind of attention matters.",
-    name: "Patricia H.",
-    detail: "Glaucoma testing",
+      "I was seen timely and treated like a friend who just stopped by for a visit. I was called by my first name by all the staff, and even the doctor greeted me by saying it was good to see me.",
+    name: "Sherri Baker",
+    detail: "General visit",
   },
   {
     quote:
-      "Ortho-K changed my mornings — I see clearly all day without glasses. The fitting process was careful and thorough.",
-    name: "Jason M.",
-    detail: "Ortho-K contacts",
+      "I was very impressed with how thorough Dr. Mehta was in her exam. The staff were all very friendly and helpful. As I am getting older, I appreciate someone who is concerned with my eye health.",
+    name: "Crystal Hart",
+    detail: "Comprehensive exam",
   },
   {
     quote:
-      "Easy scheduling, zero wait, and the doctor remembered details from my visit a year ago. Small-town care done right.",
-    name: "Emily C.",
-    detail: "Annual exam",
+      "I can't share enough great things about this practice. Dr. Mehta is personable, knowledgeable, and actually listens to her patients. The staff are always friendly and helpful and make your experience top notch.",
+    name: "Cathy Lefebvre",
+    detail: "General practice",
   },
   {
     quote:
-      "My son's sports goggles fit great and survived a whole soccer season. They knew exactly what he needed.",
-    name: "Robert D.",
-    detail: "Sports vision",
+      "Dr. Mehta and her staff always take the time to answer your questions, ensure you understand the answers, and explain test results and eye care instructions. My husband, son, and I trust Premier Eye Care completely.",
+    name: "Dale Lawrence",
+    detail: "Family care",
   },
   {
     quote:
-      "Screens were wrecking my eyes by 3pm every day. Their computer vision plan actually fixed it.",
-    name: "Aisha B.",
-    detail: "Computer vision care",
+      "I have been going to PEI for years, I have had nothing but great experiences. Small town vibe, yet high quality patient care. A true diamond in the rough. Dr. Mehta is amazing.",
+    name: "Jordan Boice",
+    detail: "Long-time patient",
   },
 ] as const;
 

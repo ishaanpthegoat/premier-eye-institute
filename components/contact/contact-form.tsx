@@ -164,7 +164,7 @@ export function ContactForm() {
             <SelectContent>
               <SelectItem value="appointment">Booking an appointment</SelectItem>
               <SelectItem value="exam">Eye or vision exam</SelectItem>
-              <SelectItem value="contacts">Contact lenses / Ortho-K</SelectItem>
+              <SelectItem value="contacts">Contact lenses</SelectItem>
               <SelectItem value="eyewear">Glasses or sunglasses</SelectItem>
               <SelectItem value="insurance">Insurance or billing</SelectItem>
               <SelectItem value="other">Something else</SelectItem>

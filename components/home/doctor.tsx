@@ -1,7 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, GraduationCap, Award, HeartHandshake } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
-import { site } from "@/lib/site";
+import { withBasePath } from "@/lib/base-path";
+import { site, team } from "@/lib/site";
+
+const doctor = team[0];
 
 const highlights = [
   {
@@ -23,14 +27,23 @@ export function Doctor() {
     <section className="bg-surface-alt">
       <div className="mx-auto grid max-w-[1140px] items-center gap-12 px-5 py-24 sm:px-8 md:py-32 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
         <Reveal className="relative">
-          {/* Photo placeholder until we receive real photography. */}
           <div className="relative mx-auto aspect-[4/5] w-full max-w-[420px] overflow-hidden rounded-xl bg-gradient-to-br from-hero-wash via-accent-tint to-[#f3dccd] shadow-warm-lg ring-1 ring-ink/5">
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-accent">
-              <span className="font-heading text-7xl font-medium">NM</span>
-              <span className="text-xs font-semibold uppercase tracking-[2.6px] text-ink/50">
-                Photo coming soon
-              </span>
-            </div>
+            {doctor.photo ? (
+              <Image
+                src={withBasePath(doctor.photo)}
+                alt={doctor.name}
+                fill
+                sizes="(min-width: 1024px) 420px, 80vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-accent">
+                <span className="font-heading text-7xl font-medium">NM</span>
+                <span className="text-xs font-semibold uppercase tracking-[2.6px] text-ink/50">
+                  Photo coming soon
+                </span>
+              </div>
+            )}
             <div
               aria-hidden="true"
               className="absolute inset-0 rounded-xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4)]"

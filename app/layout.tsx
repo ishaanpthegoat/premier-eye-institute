@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s | Premier Eye Institute",
   },
   description:
-    "Premier Eye Institute is an independent optometry practice in Creedmoor, NC led by Dr. Nisha Mehta, OD. Comprehensive eye exams, contact lenses, Ortho-K, dry eye treatment, and eyewear. Call (919) 734-2273 to book.",
+    "Premier Eye Institute is an independent optometry practice in Creedmoor, NC led by Dr. Nisha Mehta, OD. Comprehensive eye exams, contact lens fittings, LASIK co-management, and eyewear. Call (919) 734-2273 to book.",
   keywords: [
     "eye doctor Creedmoor NC",
     "optometrist Creedmoor",
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Eye Doctor in Creedmoor, NC | Premier Eye Institute",
     description:
-      "Comprehensive, unhurried eye care in Creedmoor, NC. Exams, contacts, Ortho-K, dry eye treatment, and eyewear from Dr. Nisha Mehta, OD.",
+      "Comprehensive, unhurried eye care in Creedmoor, NC. Exams, contact lenses, LASIK co-management, and eyewear from Dr. Nisha Mehta, OD.",
     url: "https://peicare.com",
     siteName: "Premier Eye Institute",
     locale: "en_US",

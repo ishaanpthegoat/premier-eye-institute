@@ -1,11 +1,7 @@
 const WORDS = [
   "Eye exams",
   "Contact lenses",
-  "Ortho-K",
-  "Dry eye relief",
   "LASIK co-management",
-  "Sports vision",
-  "Glaucoma testing",
   "Frame styling",
 ];
 
