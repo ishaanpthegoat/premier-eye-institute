@@ -5,11 +5,12 @@ import { PageHero } from "@/components/site/page-hero";
 import { CtaBand } from "@/components/site/cta-band";
 import { Reveal } from "@/components/motion/reveal";
 import { DisplayCards } from "@/components/ui/display-cards";
+import { EyewearStudio } from "@/components/eyewear/studio-loader";
 
 export const metadata: Metadata = {
   title: "Eyewear, Frames & Sunglasses",
   description:
-    "Prescription glasses, frame styling, and prescription & non-prescription sunglasses at Premier Eye Institute in Creedmoor, NC. Personal fittings, adjustments, and repairs.",
+    "Prescription glasses, frame styling, and prescription & non-prescription sunglasses at Premier Eye Institute in Creedmoor, NC. Spin frames in 3D, try them on with your camera, and book a personal fitting.",
 };
 
 const pillars = [
@@ -107,6 +108,27 @@ export default function EyewearPage() {
             and we&apos;ll walk the optical together afterward.
           </p>
         </Reveal>
+      </section>
+
+      {/* The fitting room — 3D showcase + virtual try-on */}
+      <section id="fitting-room" className="bg-ink text-white">
+        <div className="mx-auto max-w-[1200px] px-5 py-20 sm:px-8 sm:py-24">
+          <Reveal>
+            <p className="eyebrow mb-3.5">The fitting room</p>
+            <h2 className="font-heading max-w-[560px] text-[clamp(26px,3.6vw,40px)] font-medium leading-[1.1] tracking-[-0.4px] text-white">
+              Turn them over.{" "}
+              <em className="italic text-accent">Try them on.</em>
+            </h2>
+            <p className="mt-4 max-w-[520px] text-[15px] leading-[1.65] text-white/70">
+              Spin a frame in 3D, swap the acetate and lens tint, then use your
+              camera to see them on your own face — before you ever come in.
+              When you do, Maddie and Brianne finish the fit in person.
+            </p>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-12">
+            <EyewearStudio />
+          </Reveal>
+        </div>
       </section>
 
       <CtaBand />

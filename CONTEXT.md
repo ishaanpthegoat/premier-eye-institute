@@ -1,6 +1,6 @@
 # Premier Eye Institute — Session Handoff Context
 
-**Last updated:** July 6, 2026 (evening). All systems working. Live preview at https://ishaanpthegoat.github.io/premier-eye-institute/ — **if it ever shows the README instead of the site, run `npm run deploy:pages` to re-sync the live Pages branch.** Latest deploy: commit `91b2a21` on `main`, `gh-pages` force-pushed the same run (propagates in ~1 min per the deploy script; GitHub's own Pages build queue has separately taken up to ~10 min on a bad day — see gotchas below).
+**Last updated:** July 6, 2026 (night). All systems working. Live preview at https://ishaanpthegoat.github.io/premier-eye-institute/ — **if it ever shows the README instead of the site, run `npm run deploy:pages` to re-sync the live Pages branch.** (Propagates in ~1 min per the deploy script; GitHub's own Pages build queue has separately taken up to ~10 min on a bad day — see gotchas below.) **New this session: "The fitting room" — a 3D eyewear showcase + webcam virtual try-on on `/eyewear`** (see its section below). Try-on still needs a real-webcam smoke test — headless verification only exercised the error path.
 
 ## What this is
 
@@ -28,6 +28,9 @@ npm run deploy:pages                   # build + force-push out/ to gh-pages
 - **`.mcp.json` contains a real 21st.dev API key** and is **gitignored — never commit it**. shadcn MCP and chrome-devtools MCP are also configured and work.
 - PowerShell on Windows; `npx <tool> init`-style commands often hang on interactive prompts — pipe input (`"1" | npx …`) or pass explicit flags.
 - **Lenis + headless scroll testing (new, July 6 2026):** the site's global `SmoothScroll` (Lenis) intercepts real scroll on every page. In the preview tool, raw `window.scrollTo()` gets silently reverted by Lenis. Synthetic `WheelEvent` dispatches usually drive it correctly on an already-settled page, but were unreliable immediately after a fresh `window.location.href` navigation in one session (Lenis listener attach race, unconfirmed root cause). When that happens, don't fight it — verify below-the-fold assets a different way, e.g. loading a scratch `new Image()` pointed at the same URL to confirm the file itself decodes, instead of relying on scroll-triggered lazy-load.
+- **React 19 compiler lint rules vs three.js interop (new, July 6 2026 night):** this repo's ESLint runs the new `react-hooks/immutability`, `react-hooks/refs`, and `react-hooks/set-state-in-effect` rules. They forbid the standard R3F patterns (mutating scene-graph materials in effects, reading a lazily-initialized ref in JSX, `setMounted(true)` for portals). Fixes used in `components/eyewear/`: build three.js objects in a lazy-init `useRef` block, mutate only through `ref.current` chains, add narrowly-scoped `eslint-disable` comments where interop is unavoidable (see `glasses-model.tsx`), and skip the portal mount-flag entirely in `ssr:false`-only components (document always exists there).
+- **Preview-tool screenshots can wedge while a WebGL canvas is live:** mid-session, `preview_screenshot` started timing out (page itself stayed responsive — `preview_eval` still worked, no console errors). Stopping and restarting the preview server fixed it. If screenshots hang on a page with an active R3F canvas, restart the preview instead of debugging the page.
+- **Lenis + wheel-zoom widgets:** any element that needs its own wheel handling (the fitting room stage zooms on scroll) must carry `data-lenis-prevent`, or Lenis eats the wheel events.
 - **TypeScript + `as const` arrays with divergent optional fields:** if array-literal objects don't all share the same shape (e.g. only some `team` entries have a `photo` field), a bare `[...] as const` infers each entry's own narrow type instead of a common shape, and `.photo` won't type-check on entries missing it. Give the array an explicit type (see `TeamMember` in `lib/site.ts`) instead of relying on inference once entries diverge.
 
 ## Design system (client-approved; do not drift)
@@ -57,9 +60,11 @@ components/
   home/{intro,marquee,services,doctor,testimonials,stats,faq,service-icon}.tsx
   site/{header,footer,logo,page-hero,cta-band,mobile-cta-bar,smooth-scroll}.tsx
   contact/{contact-section,contact-form}.tsx
+  eyewear/{fitting-room,try-on-dialog,glasses-model,swatches,studio-loader}.tsx  ★ 3D showcase + try-on (see below)
   motion/{reveal,count-up}.tsx          (framer-motion whileInView wrapper; rAF count-up)
   ui/                                    shadcn components
-public/hero-frames/frame_0001…0122.webp   public/hero-fallback/*.webp   public/team/{dr-mehta,katie,maddie}.webp   public/logo.webp
+lib/eyewear-studio.ts                    fitting-room config: finishes, tints, hotspots, camera presets
+public/hero-frames/frame_0001…0122.webp   public/hero-fallback/*.webp   public/team/{dr-mehta,katie,maddie}.webp   public/logo.webp   public/models/glasses.glb
 ```
 
 ## The video hero (`components/home/video-hero.tsx`) — the signature piece (rebuilt July 6 2026: canvas image-sequence scrubber)
@@ -72,6 +77,16 @@ public/hero-frames/frame_0001…0122.webp   public/hero-fallback/*.webp   public
 - **Scene 04 copy rewritten** (was "glaucoma testing... corneal mapping behind Ortho-K" — a mismatch with the auto-refractor visual, *and* named two services the practice doesn't actually offer). Now reads "Precise measurements behind every exam and prescription — advanced imaging, clearly explained," which fits the visual and doesn't claim a removed service.
 - **`hero-shader.tsx`**: raw-WebGL fragment shader behind the stage, unchanged this session. Not mounted under reduced motion.
 - Reduced motion: no pinning, no canvas — the three graded fallback stills in normal flow, each with its caption(s) beneath (phoropter carries scenes 02 + 03), CTA above the stills.
+
+## The fitting room (`/eyewear`, July 6 2026 night) — 3D showcase + webcam virtual try-on
+
+New dark (`--ink`) section on the eyewear page, between the pillars grid and the CtaBand. Stack added this session: `three@0.185.1`, `@react-three/fiber@9.6.1`, `@react-three/drei@10.7.7`, `@mediapipe/tasks-vision@0.10.35`, `@types/three`.
+
+- **The model:** `public/models/glasses.glb` — a Sketchfab wayfarer, compressed from the client's 9.5 MB original (in `Downloads/glasses.glb`) to **562 KB** with `npx @gltf-transform/cli optimize --compress draco --texture-compress webp --texture-size 1024 --simplify false --palette false --join false --flatten false` (`--palette false` matters: palette merging would destroy the named materials the selectors target). Three materials as authored: **`Frame`** (untextured glossy-black front), **`Handles`** (tortoise-textured temples), **`Frame.1`** (lenses, BLEND). Draco decode via drei's default gstatic CDN decoder.
+- **`glasses-model.tsx`** normalizes the clone (front = 1 unit wide, centered, facing +Z) and owns two working `MeshPhysicalMaterial`s: frame (clearcoat acetate) and lens (transparent, `depthWrite:false`, `renderOrder:1`). "Classic tortoise" keeps the as-shipped materials; every other finish retints both frame + temples. Config (5 finishes, 4 tints, 4 hotspots, camera presets) lives in **`lib/eyewear-studio.ts`**.
+- **`fitting-room.tsx`** (client, loaded via `studio-loader.tsx` `dynamic ssr:false` — Next 16 requires the flag inside a Client Component): OrbitControls (damped, pan off, wheel-zoom — stage has `data-lenis-prevent`), **auto-rotate resumes after 4 s idle**, hotspot select flies the camera via `THREE.MathUtils.damp` in a `CameraRig` (flight target ref is cleared on user drag and when idle resumes, so it never fights the controls). Numbered drei `<Html>` markers ↔ numbered list in the rail stay in sync; detail card slides in at the stage's bottom edge. Lighting is a procedural `<Environment>` of `Lightformer`s (no HDR fetch) + one-frame `ContactShadows`. Perf: `dpr [1,2]`, `frameloop` flips `always/never` on an IntersectionObserver, ~238 fps uncapped in testing. Screenshot button composites the canvas (`preserveDrawingBuffer:true`) onto ink bg + caption, downloads a PNG. Camera default & hotspot flight distances scale up on <640 px screens (`cam.spotScale` 1.4).
+- **`try-on-dialog.tsx`** (own chunk, dynamic-imported only when "Try them on" is clicked): portal modal ("The mirror"), getUserMedia selfie stream + **MediaPipe FaceLandmarker** (wasm from jsdelivr **pinned to 0.10.35** = the installed package version; `.task` model from Google's CDN; GPU delegate with CPU fallback — so try-on needs network at runtime). Pose math is **landmark-basis, not the transformation matrix**: orthographic overlay where 1 unit = 1 CSS px, mirrored via CSS together with the video so all math stays in unmirrored image space; rotation from an orthonormal basis of eye-corner (33↔263) and forehead–chin (10↔152) vectors; scale = outer-eye span × 1.55; the model's bridge point (0, 0.05, 0.35) is pinned to the glabella/nose-bridge midpoint (168/6). Detection runs per video frame; a 0.45 lerp/slerp in `useFrame` smooths it. Camera denied/absent → friendly error state with Book CTA. Screenshot composites mirrored video + overlay at native video resolution. **Verified headless: dialog, scroll-lock, error path, Esc/backdrop close. NOT yet verified with a real webcam — needs a human smoke test for fit constants (`WIDTH_PER_EYESPAN`, `BRIDGE_LOCAL`).**
+- Copy grounds each hotspot in a real service (adjustments, bridge fitting, Rx lenses); privacy note ("runs entirely in your browser") shown in both the rail and the dialog header.
 
 ## Real content pass (July 6 2026, evening)
 
@@ -112,6 +127,7 @@ Hours (already in `lib/site.ts`): Mon–Wed 8:00am–5:00pm, Thu 9:00am–6:00pm
 3. ~~Staff/doctor photos~~ — **done July 6 2026**, real photos for Dr. Mehta, Katie, and Maddie. Crystal, Amanda, Wendy, and Brianne still show initials-only cards — add photos for them the same way if/when the client sends more.
 4. Confirm full insurance list with client; PRD open questions (booking system embed?, blog?).
 5. **Launch deploy:** Vercel (recommended, zero config; native Next.js) or a real domain instead of the GitHub Pages subpath. When going live, remove `basePath` from `next.config.ts` and redeploy to your own host.
+6. **Try-on real-webcam smoke test (new July 6 night):** open `/eyewear` → "Try them on" on a device with a camera; check the glasses sit level on the nose bridge and track head turns. Tune `WIDTH_PER_EYESPAN` (bigger = wider frames) and `BRIDGE_LOCAL` y/z (raise/push the resting point) in `components/eyewear/try-on-dialog.tsx` if the fit is off. Also consider swapping `public/models/glasses.glb` for a frame the practice actually sells.
 
 ## Deployment quick-start
 

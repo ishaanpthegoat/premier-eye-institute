@@ -147,6 +147,17 @@
   }
 }
 
+/* Hairline loading-bar sweep (fitting room / try-on mirror). The bar is
+   one-third of its track wide, so 300% carries it fully across. */
+@keyframes pei-scan {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
 @keyframes pei-float {
   0%,
   100% {
