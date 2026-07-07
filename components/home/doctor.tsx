@@ -18,7 +18,7 @@ const highlights = [
   },
   {
     icon: HeartHandshake,
-    text: "Eye care mission work in Guatemala — care with heart, at home and abroad",
+    text: "Volunteer eye care on mission trips to Guatemala",
   },
 ];
 
@@ -63,16 +63,14 @@ export function Doctor() {
           <Reveal>
             <p className="eyebrow mb-3.5">Meet your doctor</p>
             <h2 className="font-heading text-[clamp(30px,4.4vw,52px)] font-medium leading-[1.05] tracking-[-0.5px] text-ink">
-              Care built on{" "}
-              <em className="italic text-accent">experience</em> — and time to
-              listen.
+              Real experience — and{" "}
+              <em className="italic text-accent">time to listen</em>.
             </h2>
             <p className="mt-5 max-w-[520px] text-base leading-[1.65] text-body-text">
-              Dr. Nisha Mehta founded Premier Eye Institute in {site.founded}{" "}
-              to practice eye care the way she believes it should be done:
-              thorough, personal, and never rushed. She holds an MBA from East
-              Carolina University and has examined more than 5,000 eyes right
-              here in Creedmoor.
+              Dr. Nisha Mehta opened Premier Eye Institute in {site.founded}{" "}
+              because she wanted to do eye care her way: thorough, personal, and
+              never rushed. She has an MBA from East Carolina University and has
+              examined more than 5,000 eyes here in Creedmoor.
             </p>
           </Reveal>
 

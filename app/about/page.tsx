@@ -69,7 +69,7 @@ export default function AboutPage() {
             {site.founded}.
           </>
         }
-        lead="Premier Eye Institute is a doctor-owned practice — no corporate playbook, just careful eye care and honest advice for our neighbors in Creedmoor."
+        lead="Premier Eye Institute is a doctor-owned practice — no corporate playbook, just careful eye care and honest advice for people here in Creedmoor."
       />
 
       <section className="mx-auto max-w-[1140px] px-5 pb-24 sm:px-8">

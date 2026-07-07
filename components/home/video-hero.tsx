@@ -3,6 +3,7 @@
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeroShader } from "@/components/home/hero-shader";
 import { withBasePath } from "@/lib/base-path";
@@ -78,35 +79,47 @@ function frameForProgress(p: number) {
    window (see CAPTION_FADE), so the middle 60% is a full-opacity
    plateau. Scene 03 narrates the shatter apex — the exploded instrument
    suspended mid-air. */
+/* Each scroll beat doubles as a shortcut into the site — the copy that
+   fades in is a real link (with an arrow affordance), so people can jump
+   straight to the part they came for. Destinations cover the optical and
+   all three services; from/to/side stay tuned to the frame storyboard. */
 const SCENES = [
   {
-    eyebrow: "01 · The frames",
-    title: "Crafted frames, fitted to you",
-    copy: "Honest styling help from our optical team — eyewear you'll actually want to wear.",
+    eyebrow: "01 · Eyewear",
+    title: "Frames worth wearing",
+    copy: "Browse the optical, then try frames on with your camera.",
+    href: "/eyewear",
+    linkLabel: "Try them on",
     from: 0.06,
     to: 0.24,
     side: "left" as const,
   },
   {
-    eyebrow: "02 · The exam",
-    title: "Unhurried, thorough exams",
-    copy: "Modern imaging and screening, with time to actually talk about your eyes.",
+    eyebrow: "02 · Eye exams",
+    title: "Exams that take their time",
+    copy: "See how a visit goes, step by step.",
+    href: "/services/eye-exams",
+    linkLabel: "See an eye exam",
     from: 0.37,
     to: 0.56,
     side: "right" as const,
   },
   {
-    eyebrow: "03 · The precision",
-    title: "Calibrated to the smallest detail",
-    copy: "The instruments behind your prescription, tuned for exactness at every turn.",
+    eyebrow: "03 · Services",
+    title: "Everything your eyes need",
+    copy: "Exams, contact lenses, and LASIK co-management.",
+    href: "/services",
+    linkLabel: "Browse services",
     from: 0.62,
     to: 0.76,
     side: "left" as const,
   },
   {
-    eyebrow: "04 · The technology",
-    title: "Imaging that sees more",
-    copy: "Precise measurements behind every exam and prescription — advanced imaging, clearly explained.",
+    eyebrow: "04 · LASIK",
+    title: "Thinking about LASIK?",
+    copy: "We handle the workup and follow-up, close to home.",
+    href: "/services/lasik",
+    linkLabel: "About co-management",
     from: 0.83,
     to: 0.99,
     side: "center" as const,
@@ -478,17 +491,28 @@ export function VideoHero() {
               style={ART_STYLE}
             />
             {still.scenes.map((i) => (
-              <div key={SCENES[i].title} className="mx-auto mt-6 max-w-md">
-                <p className="text-xs font-semibold uppercase tracking-[2.6px] text-accent">
+              <Link
+                key={SCENES[i].title}
+                href={SCENES[i].href}
+                className="group/beat mx-auto mt-6 block max-w-md"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[2.6px] text-accent-hover">
                   {SCENES[i].eyebrow}
                 </p>
-                <h2 className="font-heading mt-2 text-xl font-semibold text-ink">
+                <h2 className="font-heading mt-2 text-xl font-semibold text-ink transition-colors duration-200 group-hover/beat:text-accent">
                   {SCENES[i].title}
                 </h2>
                 <p className="mt-1.5 text-sm leading-relaxed text-body-text">
                   {SCENES[i].copy}
                 </p>
-              </div>
+                <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-accent-tint px-4 py-1.5 text-[12.5px] font-semibold text-accent-hover">
+                  {SCENES[i].linkLabel}
+                  <ArrowRight
+                    className="size-3.5 transition-transform duration-200 ease-[var(--ease-out-strong)] group-hover/beat:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </span>
+              </Link>
             ))}
           </div>
         ))}
@@ -522,15 +546,28 @@ export function VideoHero() {
                   s.side === "center" ? "flex" : "flex lg:hidden"
                 }`}
               >
-                <p className="text-[11px] font-semibold uppercase tracking-[2.6px] text-accent">
-                  {s.eyebrow}
-                </p>
-                <h2 className="font-heading mt-2 text-[clamp(26px,3.6vw,40px)] font-medium leading-tight tracking-[-0.4px] text-ink">
-                  {s.title}
-                </h2>
-                <p className="mx-auto mt-2 max-w-md text-[14.5px] leading-relaxed text-body-text">
-                  {s.copy}
-                </p>
+                <Link
+                  href={s.href}
+                  tabIndex={-1}
+                  className="group/beat flex flex-col items-center"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[2.6px] text-accent-hover">
+                    {s.eyebrow}
+                  </p>
+                  <h2 className="font-heading mt-2 text-[clamp(26px,3.6vw,40px)] font-medium leading-tight tracking-[-0.4px] text-ink transition-colors duration-200 group-hover/beat:text-accent">
+                    {s.title}
+                  </h2>
+                  <p className="mx-auto mt-2 max-w-md text-[14.5px] leading-relaxed text-body-text">
+                    {s.copy}
+                  </p>
+                  <span className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-accent-tint px-4 py-1.5 text-[12.5px] font-semibold text-accent-hover">
+                    {s.linkLabel}
+                    <ArrowRight
+                      className="size-3.5 transition-transform duration-200 ease-[var(--ease-out-strong)] group-hover/beat:translate-x-0.5"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Link>
               </div>
             ))}
           </div>
@@ -550,15 +587,24 @@ export function VideoHero() {
                 : "right-[clamp(32px,7vw,110px)] text-right"
             }`}
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[2.6px] text-accent">
-              {s.eyebrow}
-            </p>
-            <h2 className="font-heading mt-2 text-[clamp(24px,2.4vw,32px)] font-medium leading-tight tracking-[-0.4px] text-ink">
-              {s.title}
-            </h2>
-            <p className="mt-2 text-[14.5px] leading-relaxed text-body-text">
-              {s.copy}
-            </p>
+            <Link href={s.href} tabIndex={-1} className="group/beat block">
+              <p className="text-[11px] font-semibold uppercase tracking-[2.6px] text-accent-hover">
+                {s.eyebrow}
+              </p>
+              <h2 className="font-heading mt-2 text-[clamp(24px,2.4vw,32px)] font-medium leading-tight tracking-[-0.4px] text-ink transition-colors duration-200 group-hover/beat:text-accent">
+                {s.title}
+              </h2>
+              <p className="mt-2 text-[14.5px] leading-relaxed text-body-text">
+                {s.copy}
+              </p>
+              <span className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-accent-tint px-4 py-1.5 text-[12.5px] font-semibold text-accent-hover">
+                {s.linkLabel}
+                <ArrowRight
+                  className="size-3.5 transition-transform duration-200 ease-[var(--ease-out-strong)] group-hover/beat:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </span>
+            </Link>
           </div>
         ))}
 
@@ -593,14 +639,16 @@ export function VideoHero() {
           </div>
         </div>
 
-        {/* Screen-reader version of the scene story. */}
-        <div className="sr-only">
+        {/* Accessible equivalents of the decorative scroll link-beats:
+            real, always-present links for keyboard, screen readers, SEO,
+            and no-JS. The visual beats above are aria-hidden. */}
+        <nav aria-label="Jump to a section" className="sr-only">
           {SCENES.map((s) => (
-            <p key={s.title}>
-              {s.title}. {s.copy}
-            </p>
+            <Link key={s.title} href={s.href}>
+              {s.linkLabel}: {s.title}. {s.copy}
+            </Link>
           ))}
-        </div>
+        </nav>
 
         <HeroCta className="relative z-20 mt-6 sm:mt-8" />
 
@@ -628,11 +676,12 @@ function HeroCopy() {
         {site.tagline}
       </p>
       <h1 className="font-heading animate-in fade-in slide-in-from-bottom-5 mt-4 text-[clamp(38px,5.6vw,72px)] font-medium leading-[1.02] tracking-[-0.5px] text-ink fill-mode-both duration-1000 [animation-delay:220ms]">
-        See the world in{" "}
-        <em className="italic text-accent">sharper</em> detail.
+        Eye care that{" "}
+        <em className="italic text-accent">isn&apos;t rushed</em>.
       </h1>
       <p className="animate-in fade-in slide-in-from-bottom-4 mt-4 max-w-[500px] text-[clamp(15px,1.5vw,17px)] leading-relaxed text-body-text fill-mode-both duration-1000 [animation-delay:340ms]">
-        Comprehensive, unhurried eye care in Creedmoor. Scroll to look closer.
+        Thorough exams, honest advice, and glasses you&apos;ll actually like.
+        Scroll to see what we do — or jump straight in.
       </p>
     </div>
   );

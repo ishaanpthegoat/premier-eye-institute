@@ -1,7 +1,7 @@
 export const site = {
   name: "Premier Eye Institute",
   legalName: "Premier Eye Institute, OD, PLLC",
-  tagline: "Eye care, refined",
+  tagline: "Independent eye care in Creedmoor",
   doctor: "Dr. Nisha P. Mehta, OD",
   founded: 2014,
   phone: "919-734-2273",

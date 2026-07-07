@@ -20,11 +20,11 @@ export default function ReviewsPage() {
         eyebrow="Reviews"
         title={
           <>
-            Our favorite feedback comes{" "}
-            <em className="italic text-accent">from you</em>.
+            What patients{" "}
+            <em className="italic text-accent">actually say</em>.
           </>
         }
-        lead="We're proud of the trust our patients place in us. Here's a sample of what they share — and where to leave your own."
+        lead="Here's a sample of what patients have told us — and where to leave your own review."
       />
 
       <section className="mx-auto max-w-[1000px] px-5 pb-24 sm:px-8">
@@ -54,11 +54,11 @@ export default function ReviewsPage() {
         <Reveal delay={0.15} className="mt-12">
           <div className="rounded-lg border border-ink/[0.07] bg-surface-alt p-8 text-center sm:p-10">
             <h2 className="font-heading text-2xl font-semibold text-ink">
-              Been to see us? Share your experience.
+              Been in to see us? Leave a review.
             </h2>
             <p className="mx-auto mt-2 max-w-md text-[14.5px] leading-relaxed text-body-text">
-              Reviews help your neighbors find good care. A minute of your
-              time means a lot to a small, independent practice.
+              Reviews help other people find good care. A minute of your time
+              means a lot to a small practice like ours.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3.5">
               <Button asChild variant="pill" size="pill-sm">

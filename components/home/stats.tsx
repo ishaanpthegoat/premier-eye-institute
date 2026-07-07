@@ -11,7 +11,7 @@ export function Stats() {
             Trusted since {site.founded}
           </p>
           <h2 className="font-heading text-[clamp(28px,4vw,46px)] font-medium tracking-[-0.5px] text-white">
-            A decade of clearer vision.
+            Ten years in Creedmoor.
           </h2>
         </Reveal>
 

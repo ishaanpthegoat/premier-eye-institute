@@ -76,7 +76,7 @@ export const journeys: ServiceJourney[] = [
       },
       {
         id: "e3-exam",
-        headline: "The main event",
+        headline: "The exam itself",
         body: "Dr. Mehta checks your vision and the health of your eyes, then walks you through anything she finds in plain English. She never rushes the exam.",
         duration: "About 20–25 min ⏱ PLACEHOLDER",
         art: "/services-art/eye-exams/e3-exam.svg",
@@ -179,7 +179,7 @@ export const journeys: ServiceJourney[] = [
   {
     slug: "lasik",
     title: "LASIK Co-Management",
-    tagline: "LASIK, guided from first question to final follow-up.",
+    tagline: "LASIK, from your first question to your final follow-up.",
     totalTime:
       "The full journey spans several weeks; most of your visits are short, and your care stays local. ⏱ PLACEHOLDER",
     cta: { label: "Ask us about LASIK", href: "/book" },

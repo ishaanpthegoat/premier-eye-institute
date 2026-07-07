@@ -22,10 +22,10 @@ export default function ServicesPage() {
         title={
           <>
             Everything your eyes need,{" "}
-            <em className="italic text-accent">under one roof</em>.
+            <em className="italic text-accent">in one place</em>.
           </>
         }
-        lead="From routine exams to specialty lenses, every service is delivered the same way: unhurried, explained in plain English, and tailored to you."
+        lead="Exams, contact fittings, and LASIK co-management — all done the same way: unhurried, and explained in plain English."
       />
 
       <section className="mx-auto max-w-[900px] px-5 pb-24 sm:px-8">

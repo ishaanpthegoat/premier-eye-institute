@@ -47,7 +47,7 @@ export default function EyewearPage() {
             <em className="italic text-accent">want</em> to wear.
           </>
         }
-        lead="An exam tells us what your eyes need. The optical is where it becomes something you love wearing every day."
+        lead="The exam sorts out your prescription. The optical is where you find frames you actually like."
       />
 
       <section className="mx-auto max-w-[1080px] px-5 pb-24 sm:px-8">

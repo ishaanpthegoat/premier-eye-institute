@@ -50,6 +50,17 @@ const WIDTH_PER_EYESPAN = 1.55;
    the model point that gets pinned to the wearer's nose bridge. */
 const BRIDGE_LOCAL = new THREE.Vector3(0, 0.05, 0.35);
 
+/* How fast the rendered glasses chase the detected pose. Higher = snappier,
+   lower = smoother. Applied frame-rate-independently (see FaceAnchor) so it
+   feels the same at 60 and 120fps, instead of the old fixed per-frame lerp
+   that jittered faster on high-refresh screens. */
+const POSE_DAMP = 16;
+
+/* Face detection occasionally drops a single frame (a blink, a fast turn).
+   Hold the last pose for this many missed frames before hiding the glasses,
+   so they don't flicker off and snap back on every dropped frame. */
+const MISS_GRACE = 6;
+
 type Phase = "loading" | "live" | "error";
 
 type Pose = {
@@ -69,7 +80,7 @@ function FaceAnchor({
   children: React.ReactNode;
 }) {
   const group = useRef<THREE.Group>(null);
-  useFrame(() => {
+  useFrame((_, delta) => {
     const g = group.current;
     if (!g) return;
     const p = pose.current;
@@ -78,15 +89,21 @@ function FaceAnchor({
       return;
     }
     if (!g.visible) {
+      // First frame back: snap to the pose instead of gliding in from
+      // wherever it was left, so it doesn't fly across the mirror.
       g.visible = true;
       g.position.copy(p.position);
       g.quaternion.copy(p.quaternion);
       g.scale.setScalar(p.scale);
       return;
     }
-    g.position.lerp(p.position, 0.45);
-    g.quaternion.slerp(p.quaternion, 0.45);
-    g.scale.setScalar(THREE.MathUtils.lerp(g.scale.x, p.scale, 0.45));
+    // Frame-rate-independent smoothing: t≈0.26 at 60fps, and the same
+    // visual damping at 120fps. Clamped delta guards against a tab-restore
+    // spike that would otherwise snap the glasses.
+    const t = 1 - Math.exp(-POSE_DAMP * Math.min(delta, 0.05));
+    g.position.lerp(p.position, t);
+    g.quaternion.slerp(p.quaternion, t);
+    g.scale.setScalar(THREE.MathUtils.lerp(g.scale.x, p.scale, t));
   });
   return (
     <group ref={group} visible={false}>
@@ -124,6 +141,8 @@ export default function TryOnDialog({
     quaternion: new THREE.Quaternion(),
     scale: 1,
   });
+  /* Consecutive detection frames with no face — see MISS_GRACE. */
+  const missRef = useRef(0);
 
   /* Scratch objects reused every detection frame — no per-frame allocation. */
   const scratch = useMemo(
@@ -178,10 +197,16 @@ export default function TryOnDialog({
       const result = landmarker.detectForVideo(video, performance.now());
       const face = result.faceLandmarks?.[0];
       if (!face) {
-        pose.current.tracked = false;
-        setFaceSeen(false);
+        // Ride out a few dropped frames on the last good pose before
+        // hiding — a blink or quick turn shouldn't blink the glasses off.
+        missRef.current += 1;
+        if (missRef.current > MISS_GRACE) {
+          pose.current.tracked = false;
+          setFaceSeen(false);
+        }
         return;
       }
+      missRef.current = 0;
       const { a, b, c, d, x, y, z, m } = scratch;
       /* Normalized landmark → scene px: x right, y up, z toward the viewer.
          The overlay canvas is CSS-mirrored together with the video, so all

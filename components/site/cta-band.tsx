@@ -15,8 +15,8 @@ export function CtaBand() {
             Ready when you are
           </p>
           <h2 className="font-heading text-[clamp(30px,4.4vw,52px)] font-medium leading-[1.08] tracking-[-0.5px] text-white">
-            Let&apos;s take a closer look at{" "}
-            <em className="italic text-accent">your</em> eyes.
+            Let&apos;s get you{" "}
+            <em className="italic text-accent">booked in</em>.
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="flex flex-wrap items-center justify-center gap-3.5">
