@@ -8,6 +8,14 @@ import type { FrameFinish, LensTint } from "@/lib/eyewear-studio";
 
 export const GLASSES_MODEL_URL = withBasePath("/models/glasses.glb");
 
+/* Self-hosted Draco decoder (supply-chain hardening). The glasses .glb is
+   Draco-compressed; by default drei fetches the decoder from
+   www.gstatic.com at runtime. Passing this path as useGLTF's 2nd arg makes
+   drei load the decoder from our own origin instead (files copied from
+   three/examples/jsm/libs/draco/gltf into /public/draco), so the CSP can stay
+   locked to 'self' with no external code execution. */
+const DRACO_DECODER_PATH = withBasePath("/draco/");
+
 type Slot = "frame" | "temple" | "lens";
 
 type Part = {
@@ -78,7 +86,7 @@ export function GlassesModel({
   finish: FrameFinish;
   tint: LensTint;
 }) {
-  const { scene } = useGLTF(GLASSES_MODEL_URL);
+  const { scene } = useGLTF(GLASSES_MODEL_URL, DRACO_DECODER_PATH);
 
   /* Lazily build a per-mount clone + working materials. */
   const builtRef = useRef<Built | null>(null);
@@ -122,4 +130,4 @@ export function GlassesModel({
   return <primitive object={builtRef.current.root} />;
 }
 
-useGLTF.preload(GLASSES_MODEL_URL);
+useGLTF.preload(GLASSES_MODEL_URL, DRACO_DECODER_PATH);

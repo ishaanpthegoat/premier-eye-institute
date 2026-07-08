@@ -25,12 +25,17 @@ import {
 } from "@/lib/eyewear-studio";
 import { GlassesModel } from "./glasses-model";
 import { Swatches } from "./swatches";
+import { withBasePath } from "@/lib/base-path";
 
-/* Pinned to the installed @mediapipe/tasks-vision version. */
-const WASM_URL =
-  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.35/wasm";
-const MODEL_URL =
-  "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
+/* Self-hosted MediaPipe assets (supply-chain hardening): the WASM runtime and
+   the FaceLandmarker model are served from our own origin under
+   /public/mediapipe instead of cdn.jsdelivr.net / storage.googleapis.com, so a
+   compromise of those CDNs can't inject code into this page. The WASM files are
+   copied from node_modules/@mediapipe/tasks-vision/wasm (kept in sync with the
+   pinned package version); the .task model is the pinned float16/1 build.
+   withBasePath() keeps the URLs correct under the GitHub Pages subpath. */
+const WASM_URL = withBasePath("/mediapipe/wasm");
+const MODEL_URL = withBasePath("/mediapipe/models/face_landmarker.task");
 
 /* Face Mesh landmark indices used to pose the glasses. */
 const LM = {
