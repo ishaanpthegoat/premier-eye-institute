@@ -117,14 +117,18 @@ const jsonLd = {
   Also note: a <meta> CSP only governs content that appears after it in the
   document, so it is inherently a partial control vs. a response header.
 */
-const isDev = process.env.NODE_ENV !== "production";
+/* This <meta> CSP is only rendered for the GitHub Pages export build (which
+   cannot send HTTP headers). On Vercel (no base path) the equivalent — and
+   stronger — policy is delivered as a real header from next.config.ts instead,
+   so we skip the meta there to avoid a redundant/second CSP. */
+const isPagesBuild = (process.env.NEXT_PUBLIC_BASE_PATH ?? "") !== "";
 const cspDirectives = [
   `default-src 'self'`,
-  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${isDev ? " 'unsafe-eval'" : ""}`,
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'`,
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' data: blob:`,
   `font-src 'self'`,
-  `connect-src 'self' blob:${isDev ? " ws: wss:" : ""}`,
+  `connect-src 'self' blob:`,
   `media-src 'self' blob:`,
   `worker-src 'self' blob:`,
   `object-src 'none'`,
@@ -146,10 +150,12 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <head>
-        {/* Keep first in <head> so the policy governs as much of the document
-            as a meta-tag CSP can. See the block comment above for rationale
-            and the directives that must move to HTTP headers post-migration. */}
-        <meta httpEquiv="Content-Security-Policy" content={cspContent} />
+        {/* Pages-export only: keep first in <head> so the policy governs as
+            much of the document as a meta-tag CSP can. On Vercel this is a
+            real HTTP header from next.config.ts instead (see comment above). */}
+        {isPagesBuild && (
+          <meta httpEquiv="Content-Security-Policy" content={cspContent} />
+        )}
       </head>
       <body className="min-h-full flex flex-col overflow-x-clip">
         <script

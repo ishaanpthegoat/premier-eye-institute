@@ -7,63 +7,41 @@ implemented are in the "Done" section at the bottom for context.
 
 ---
 
-## 1. Migrate hosting to Vercel or Netlify → unlocks real HTTP security headers
+## 1. Deploy to Vercel → turns on the real HTTP security headers (CODE READY)
 
-**Why deferred:** GitHub Pages cannot set HTTP response headers. We shipped a
-partial Content-Security-Policy as a `<meta http-equiv>` tag (see
-`app/layout.tsx`), but several critical protections are **header-only** and are
-silently ignored in meta form:
+**Status: the code is prepped — only the Vercel account step remains.**
 
-- `frame-ancestors` (clickjacking protection; `X-Frame-Options` is also header-only)
-- `Strict-Transport-Security` (HSTS — force HTTPS at the browser level)
-- `X-Content-Type-Options: nosniff`
-- `Referrer-Policy`
-- CSP `report-uri` / `report-to` (violation reporting)
+GitHub Pages cannot send HTTP response headers, so on Pages the CSP ships as a
+`<meta http-equiv>` tag and these header-only protections are missing:
+`frame-ancestors` (clickjacking), `Strict-Transport-Security` (HSTS),
+`X-Content-Type-Options`, `Referrer-Policy`.
 
-A meta-tag CSP also only governs content that appears *after* it in the
-document, so it is inherently weaker than a response header.
+`next.config.ts` is now **dual-target**: the `deploy:pages` build still exports
+with the `<meta>` CSP (Pages stays working as the backup), and a normal Vercel
+build automatically serves the full header suite — CSP (with `frame-ancestors`),
+HSTS, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`,
+`Referrer-Policy`, and a `Permissions-Policy` that keeps `camera=(self)` for the
+try-on while denying mic/geolocation. No `vercel.json` needed; the headers live
+in `next.config.ts`'s `headers()` (verified locally via `next start` + `curl`).
+The `<meta>` CSP auto-suppresses on Vercel so there's no duplicate policy.
 
-**What unlocks it:** Deploy to a host that supports headers. Next.js is
-natively supported on both Vercel and Netlify (zero config for this app).
+**What unlocks it — one-time Vercel import (~5 min, needs a Vercel login):**
 
-**Copy-paste for migration day** — drop this `vercel.json` at the repo root.
-It sets the full header suite AND promotes the CSP from meta to a real header
-(you can then delete the `<meta http-equiv="Content-Security-Policy">` from
-`app/layout.tsx`). Note: `next.config.ts` currently uses `output: "export"`
-for static Pages — on Vercel you can remove `output: "export"` and `basePath`
-to run it as a normal Next app, or keep the export and let Vercel serve it
-statically; either way `vercel.json` headers apply.
+1. Go to [vercel.com](https://vercel.com) → sign in with the GitHub account
+   (free "Hobby" plan is fine).
+2. **Add New… → Project** → import `ishaanpthegoat/premier-eye-institute`.
+3. Framework preset auto-detects **Next.js**. Leave build settings at defaults
+   — **do NOT set `NEXT_PUBLIC_BASE_PATH`** (leaving it empty is what switches
+   the config into full-app + headers mode).
+4. Click **Deploy**. You'll get a `…vercel.app` URL with all headers live.
+5. (Optional) verify: open the site, DevTools → Network → click the document
+   request → Response Headers should list `content-security-policy`,
+   `strict-transport-security`, etc.
+6. GitHub Pages keeps working untouched as the backup deploy.
 
-```json
-{
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; media-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
-        },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(self), microphone=(), geolocation=()" }
-      ]
-    }
-  ]
-}
-```
-
-> The CSP header value adds `frame-ancestors 'none'` (not possible in the meta
-> version). `Permissions-Policy` keeps `camera=(self)` because the webcam
-> virtual try-on on `/eyewear` needs the camera on our own origin;
-> microphone/geolocation are denied. If you keep `basePath`, the `source` still
-> matches because headers apply by path on the deployed origin.
-
-**Alternative (stay on Next, no vercel.json):** if you drop `output: "export"`,
-move these into `next.config.ts` via an `async headers()` function. Equivalent
-effect; use whichever matches the final host.
+**Later — custom domain (peicare.com):** in Vercel → Project → Settings →
+Domains, add the domain and follow the DNS instructions (Vercel issues a free
+auto-renewing HTTPS cert). Then do the registrar/DNS 2FA in §3.
 
 ---
 
