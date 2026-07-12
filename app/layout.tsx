@@ -134,7 +134,8 @@ const cspDirectives = [
   `object-src 'none'`,
   `base-uri 'self'`,
   `form-action 'self'`,
-  `frame-src 'none'`,
+  // Allow the embedded Google Map on the contact page (site.mapsEmbedSrc).
+  `frame-src https://www.google.com`,
 ];
 const cspContent = cspDirectives.join("; ");
 
