@@ -18,7 +18,7 @@ export const site = {
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=Premier+Eye+Institute+2531+E+Lyon+Station+Rd+Suite+F+Creedmoor+NC+27522",
   mapsEmbedSrc:
-    "https://www.google.com/maps?q=2531+E+Lyon+Station+Rd+Suite+F,+Creedmoor,+NC+27522&output=embed",
+    "https://www.google.com/maps?q=Premier+Eye+Institute,+2531+E+Lyon+Station+Rd+Suite+F,+Creedmoor,+NC+27522&output=embed",
   portalUrl: "https://crystalpm.com",
   facebook: "https://facebook.com/PEIcareNC",
   twitter: "https://twitter.com/PEIcareNC",
