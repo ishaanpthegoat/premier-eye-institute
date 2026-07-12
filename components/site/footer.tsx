@@ -18,7 +18,7 @@ export function Footer() {
               href={site.facebook}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline-offset-4 transition-colors hover:text-white hover:underline"
+              className="underline underline-offset-4 transition-colors hover:text-white"
             >
               Facebook
             </a>
@@ -26,7 +26,7 @@ export function Footer() {
               href={site.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline-offset-4 transition-colors hover:text-white hover:underline"
+              className="underline underline-offset-4 transition-colors hover:text-white"
             >
               X / Twitter
             </a>
